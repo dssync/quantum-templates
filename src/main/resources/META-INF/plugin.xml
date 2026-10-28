@@ -1,0 +1,43 @@
+<idea-plugin>
+    <id>com.quantumtemplates</id>
+    <name>Quantum 3 File Templates</name>
+    <vendor>Tom Jackson</vendor>
+    <description><![CDATA[
+        New-file templates for Photon Quantum 3: Components (.qtn), Systems, Commands, Assets,
+        EntityView scripts and Input scripts. Right-click a folder and choose <b>New &gt; Quantum Script</b>.
+        <br/><br/>
+        <b>Go to QTN Declaration</b> (Ctrl+Alt+Q) jumps from a codegen'd symbol to the .qtn that declared it.
+        Ctrl+Click can offer the same jump; configure it, and the K&amp;R or Allman brace style of new files,
+        under <b>Settings &gt; Tools &gt; Quantum</b>.
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <actions>
+        <action id="QuantumTemplates.NewQuantumFile"
+                class="com.quantumtemplates.NewQuantumFileAction"
+                text="Quantum Script"
+                description="Create a new Quantum 3 file"
+                icon="com.quantumtemplates.QuantumIcons.QuantumIcon">
+            <add-to-group group-id="NewGroup" anchor="first"/>
+        </action>
+        <action id="QuantumTemplates.GoToQtnDeclaration"
+                class="com.quantumtemplates.GoToQtnDeclarationAction"
+                text="Go to QTN Declaration"
+                description="Jump from a Quantum codegen symbol to its declaration in a .qtn file"
+                icon="com.quantumtemplates.QuantumIcons.QuantumIcon">
+            <keyboard-shortcut keymap="$default" first-keystroke="control alt Q"/>
+            <add-to-group group-id="GoToCodeGroup" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Wraps GotoDeclaration (Ctrl+Click / Ctrl+B) to offer the .qtn declaration. -->
+        <postStartupActivity implementation="com.quantumtemplates.QtnCtrlClickStartup"/>
+        <applicationConfigurable parentId="tools"
+                                 instance="com.quantumtemplates.QuantumSettingsConfigurable"
+                                 id="com.quantumtemplates.QuantumSettingsConfigurable"
+                                 displayName="Quantum"/>
+    </extensions>
+</idea-plugin>

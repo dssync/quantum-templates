@@ -1,0 +1,16 @@
+using Photon.Deterministic;
+
+namespace Quantum {
+    public unsafe class ${NAME} : SystemMainThreadFilter<${NAME}.Filter> {
+
+        public struct Filter {
+            public EntityRef Entity;
+            // Add component pointers here, e.g.:
+            // public Transform3D* Transform;
+        }
+
+        public override void Update(Frame f, ref Filter filter) {
+
+        }
+    }
+}

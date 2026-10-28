@@ -1,0 +1,11 @@
+using Photon.Deterministic;
+
+namespace Quantum {
+    public class ${NAME} : DeterministicCommand {
+
+        public override void Serialize(BitStream stream) {
+            // Serialize every field, e.g.:
+            // stream.Serialize(ref Value);
+        }
+    }
+}

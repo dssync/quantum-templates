@@ -1,0 +1,20 @@
+using Quantum;
+using UnityEngine;
+
+namespace ${NAMESPACE} {
+    public class ${NAME} : QuantumEntityViewComponent {
+
+        public override void OnActivate(Frame frame) {
+
+        }
+
+        public override void OnUpdateView() {
+            // Read simulation state and update visuals here, e.g.:
+            // var transform = VerifiedFrame.Get<Transform3D>(EntityRef);
+        }
+
+        public override void OnDeactivate() {
+
+        }
+    }
+}

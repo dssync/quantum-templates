@@ -1,0 +1,17 @@
+using Photon.Deterministic;
+using Quantum;
+using UnityEngine;
+
+namespace ${NAMESPACE} {
+    public class ${NAME} : MonoBehaviour {
+
+        private void OnEnable() {
+            QuantumCallback.Subscribe(this, (CallbackPollInput callback) => PollInput(callback));
+        }
+
+        public void PollInput(CallbackPollInput callback) {
+            Quantum.Input input = new Quantum.Input();
+            callback.SetInput(input, DeterministicInputFlags.Repeatable);
+        }
+    }
+}

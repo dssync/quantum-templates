@@ -1,0 +1,8 @@
+using Photon.Deterministic;
+
+namespace Quantum {
+    public class ${NAME} : AssetObject {
+        // Add asset fields here, e.g.:
+        // public FP Speed;
+    }
+}

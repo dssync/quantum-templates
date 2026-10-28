@@ -1,0 +1,8 @@
+using Quantum;
+using UnityEngine;
+
+namespace ${NAMESPACE} {
+    public class ${NAME} : QuantumMonoBehaviour, IQuantumViewContext {
+
+    }
+}
