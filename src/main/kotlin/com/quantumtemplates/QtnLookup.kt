@@ -21,6 +21,8 @@ data class QtnDeclaration(val word: String, val file: VirtualFile, val line: Int
 // Matching is by name only: the codegen leaves no source mapping in the generated C#.
 object QtnLookup {
 
+    private val BOM = Char(0xFEFF).toString()
+
     /** The editor offset an action targets: under the pointer for a mouse shortcut, otherwise the caret. */
     fun targetOffset(editor: Editor, inputEvent: InputEvent?): Int =
         (inputEvent as? MouseEvent)
@@ -58,13 +60,13 @@ object QtnLookup {
     }
 
     private fun findDeclaration(project: Project, word: String, names: List<String>): QtnDeclaration? {
-        val files = FilenameIndex.getAllFilesByExt(project, "qtn", GlobalSearchScope.projectScope(project))
-            .sortedBy { it.path }
+        val files = qtnFiles(project)
         if (files.isEmpty()) return null
         val texts = files.map { file ->
-            // Use the open document when there is one so unsaved edits are searched too.
+            // Use the open document when there is one so unsaved edits are searched too. Raw file content keeps
+            // a UTF-8 BOM, which would stop a declaration on line 1 matching `^\s*`.
             file to (FileDocumentManager.getInstance().getCachedDocument(file)?.charsSequence?.toString()
-                ?: String(file.contentsToByteArray(), file.charset))
+                ?: String(file.contentsToByteArray(), file.charset).removePrefix(BOM))
         }
 
         // Prefer the most specific name across all files before falling back to looser ones.
@@ -76,6 +78,21 @@ object QtnLookup {
             }
         }
         return null
+    }
+
+    // Quantum's codegen accepts any case (Foo.Qtn), but FilenameIndex.getAllFilesByExt matches the extension
+    // case-sensitively, so collect the names and filter them here.
+    private fun qtnFiles(project: Project): List<VirtualFile> {
+        val scope = GlobalSearchScope.projectScope(project)
+        val names = mutableListOf<String>()
+        FilenameIndex.processAllFileNames({ name ->
+            if (name.endsWith(".qtn", ignoreCase = true)) names += name
+            true
+        }, scope, null)
+        return names
+            .flatMap { FilenameIndex.getVirtualFilesByName(it, scope) }
+            .distinct()
+            .sortedBy { it.path }
     }
 
     private fun declarationPattern(name: String): Regex {

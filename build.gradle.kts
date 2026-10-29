@@ -47,6 +47,8 @@ intellijPlatform {
 
     pluginConfiguration {
         version = providers.gradleProperty("pluginVersion")
+        // Shown on the Marketplace page and in Rider's plugin details.
+        changeNotes = providers.fileContents(layout.projectDirectory.file("change-notes.html")).asText
         ideaVersion {
             sinceBuild = providers.gradleProperty("pluginSinceBuild")
             // No upper bound: the plugin only uses long-stable platform APIs.
